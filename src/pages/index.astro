@@ -3,6 +3,8 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+const base = import.meta.env.BASE_URL;
 ---
 
 <!doctype html>
@@ -13,37 +15,358 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 	<body>
 		<Header />
 		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
+			<section class="title-screen">
+				<p class="kicker">PLAYER 1 START</p>
+				<h1 class="arcade-title">BOWEI'S<br />BLOG</h1>
+				<p class="tagline">A side-scrolling adventure through code, ideas &amp; pixels.</p>
+				<a class="start-btn" href={`${base}blog`}>▶ PRESS START</a>
+				<p class="hi-score">HI-SCORE&nbsp;&nbsp;999999</p>
+			</section>
+
+			<section class="select">
+				<h2>SELECT LEVEL</h2>
+				<p class="howto">
+					<span class="key">←</span><span class="key">→</span> MOVE &nbsp;·&nbsp;
+					<span class="key">SPACE</span> JUMP &nbsp;·&nbsp; BONK A <span class="qmark">?</span> BLOCK TO GO
+				</p>
+
+				<div class="playfield" id="playfield" tabindex="0" aria-label="Mini platformer menu. Use arrow keys to move and space to jump into a block to navigate.">
+					<div class="clouds"></div>
+
+					<a class="qbox" href={`${base}blog`} data-label="BLOG">
+						<span class="q">?</span>
+						<span class="qlabel">BLOG</span>
+					</a>
+					<a class="qbox" href={`${base}about`} data-label="ABOUT">
+						<span class="q">?</span>
+						<span class="qlabel">ABOUT</span>
+					</a>
+					<a class="qbox" href="https://github.com/Xu929-X1" target="_blank" data-label="GITHUB">
+						<span class="q">?</span>
+						<span class="qlabel">GITHUB</span>
+					</a>
+
+					<div class="hero" id="hero">
+						<div class="hero-face"></div>
+					</div>
+					<div class="ground"></div>
+				</div>
+				<p class="tap-hint">On touch? Just tap a block.</p>
+			</section>
 		</main>
 		<Footer />
 	</body>
 </html>
+
+<style>
+	.title-screen {
+		text-align: center;
+		padding: 2em 0 3em;
+	}
+	.kicker {
+		font-family: var(--font-pixel);
+		font-size: 0.7rem;
+		color: var(--green);
+		animation: blink 1s infinite steps(1);
+		margin-bottom: 1.5em;
+	}
+	@keyframes blink { 50% { opacity: 0; } }
+	.arcade-title {
+		font-size: clamp(2rem, 9vw, 4.5rem);
+		line-height: 1.15;
+		color: var(--yellow);
+		letter-spacing: 2px;
+		text-shadow:
+			4px 4px 0 var(--magenta),
+			8px 8px 0 #000,
+			0 0 24px rgba(255, 210, 63, 0.4);
+		margin-bottom: 0.6em;
+	}
+	.tagline {
+		max-width: 28ch;
+		margin: 0 auto 2em;
+		color: var(--ink);
+		font-size: 1.2rem;
+	}
+	.start-btn {
+		display: inline-block;
+		font-family: var(--font-pixel);
+		font-size: 0.9rem;
+		color: #000;
+		background: var(--cyan);
+		border: var(--px) solid #000;
+		box-shadow: var(--shadow-hard);
+		padding: 0.9em 1.4em;
+		text-decoration: none;
+		animation: pulse 0.9s infinite steps(2);
+	}
+	.start-btn:hover {
+		background: var(--magenta);
+		color: #fff;
+		transform: translate(3px, 3px);
+		box-shadow: 3px 3px 0 #000;
+		animation: none;
+	}
+	@keyframes pulse { 50% { opacity: 0.6; } }
+	.hi-score {
+		font-family: var(--font-pixel);
+		font-size: 0.6rem;
+		color: var(--magenta);
+		margin-top: 2.5em;
+	}
+
+	.select { margin-top: 1em; }
+	.select h2 { text-align: center; margin-bottom: 0.8em; }
+	.howto {
+		text-align: center;
+		font-family: var(--font-pixel);
+		font-size: 0.5rem;
+		line-height: 2;
+		color: var(--dim);
+		margin-bottom: 1.2em;
+	}
+	.howto .key {
+		display: inline-block;
+		padding: 2px 5px;
+		margin: 0 1px;
+		color: var(--ink);
+		background: #000;
+		border: 2px solid var(--cyan);
+	}
+	.howto .qmark { color: var(--yellow); }
+
+	/* ---- playfield ---- */
+	.playfield {
+		position: relative;
+		height: 320px;
+		overflow: hidden;
+		background:
+			linear-gradient(180deg, #1a1450 0%, #2a1a66 60%, #3a2480 100%);
+		border: var(--px) solid #000;
+		box-shadow: var(--shadow-hard);
+		outline: none;
+		image-rendering: pixelated;
+	}
+	.playfield:focus-visible { border-color: var(--green); }
+	.clouds {
+		position: absolute;
+		inset: 0;
+		background-image:
+			radial-gradient(circle at 18% 24%, rgba(255,255,255,0.18) 0 18px, transparent 19px),
+			radial-gradient(circle at 70% 16%, rgba(255,255,255,0.14) 0 22px, transparent 23px),
+			radial-gradient(circle at 88% 40%, rgba(255,255,255,0.10) 0 14px, transparent 15px);
+		animation: drift 18s linear infinite alternate;
+	}
+	@keyframes drift { to { transform: translateX(-24px); } }
+
+	.ground {
+		position: absolute;
+		left: 0; right: 0; bottom: 0;
+		height: 40px;
+		background:
+			repeating-linear-gradient(90deg, #b5651d 0 14px, #8a4a14 14px 16px),
+			#a85c1a;
+		border-top: var(--px) solid #000;
+	}
+
+	.qbox {
+		position: absolute;
+		top: 96px;
+		width: 56px;
+		height: 56px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		background: var(--yellow);
+		border: var(--px) solid #000;
+		box-shadow: inset -4px -4px 0 #c79a14, inset 4px 4px 0 #ffe98a;
+		text-decoration: none;
+		cursor: pointer;
+	}
+	.qbox:nth-child(2) { left: 16%; }
+	.qbox:nth-child(3) { left: 46%; top: 70px; }
+	.qbox:nth-child(4) { left: 76%; }
+	.qbox .q {
+		font-family: var(--font-pixel);
+		font-size: 1.1rem;
+		color: #000;
+		animation: qpulse 0.8s infinite steps(2);
+	}
+	@keyframes qpulse { 50% { opacity: 0.55; } }
+	.qbox .qlabel {
+		font-family: var(--font-pixel);
+		font-size: 0.32rem;
+		color: #000;
+		margin-top: 2px;
+	}
+	.qbox:hover { background: #fff04a; }
+	.qbox.hit {
+		background: #7a5a12;
+		box-shadow: inset -4px -4px 0 #5a4210, inset 4px 4px 0 #9a7a1a;
+		animation: bonk 0.25s steps(3);
+	}
+	.qbox.hit .q { color: var(--magenta); animation: none; }
+	@keyframes bonk {
+		0% { transform: translateY(0); }
+		40% { transform: translateY(-14px); }
+		100% { transform: translateY(0); }
+	}
+	/* coin pop */
+	.coin {
+		position: absolute;
+		width: 16px; height: 16px;
+		background: var(--yellow);
+		border: 2px solid #000;
+		border-radius: 50%;
+		pointer-events: none;
+		animation: coinpop 0.5s steps(5) forwards;
+		z-index: 5;
+	}
+	@keyframes coinpop {
+		0% { transform: translateY(0) scale(1); opacity: 1; }
+		100% { transform: translateY(-70px) scale(1.4); opacity: 0; }
+	}
+
+	.hero {
+		position: absolute;
+		left: 24px;
+		bottom: 40px;
+		width: 34px;
+		height: 40px;
+		background: #e8312f;             /* red cap/shirt */
+		border: 3px solid #000;
+		box-shadow: inset 0 -16px 0 #2a6cff; /* blue overalls bottom */
+		z-index: 4;
+		will-change: transform, left;
+	}
+	.hero-face {
+		position: absolute;
+		top: 6px; left: 50%;
+		transform: translateX(-50%);
+		width: 16px; height: 8px;
+		background: #f1c27d;            /* face */
+		box-shadow: -5px 0 0 #000, 5px 0 0 #000; /* two eyes */
+	}
+	.hero.face-left { transform: scaleX(-1); }
+
+	.tap-hint {
+		text-align: center;
+		font-family: var(--font-pixel);
+		font-size: 0.42rem;
+		color: var(--dim);
+		margin-top: 0.8em;
+	}
+
+	@media (max-width: 720px) {
+		.playfield { height: 260px; }
+		.qbox { width: 48px; height: 48px; }
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.clouds, .qbox .q { animation: none; }
+	}
+</style>
+
+<script>
+	const field = document.getElementById('playfield');
+	const hero = document.getElementById('hero');
+	if (field && hero) {
+		const boxes = Array.from(field.querySelectorAll('.qbox'));
+
+		// physics state (px, relative to field)
+		const GROUND = 40;          // ground height
+		const W = () => field.clientWidth;
+		let x = 24;
+		let vx = 0;
+		let vy = 0;
+		let onGround = true;
+		const SPEED = 3.4;
+		const GRAV = 0.9;
+		const JUMP = 15;
+		const heroW = 34, heroH = 40;
+
+		const keys: Record<string, boolean> = {};
+		const isMove = (k: string) =>
+			['arrowleft', 'arrowright', 'a', 'd', ' ', 'arrowup', 'w', 'spacebar'].includes(k);
+
+		function jump() {
+			if (onGround) { vy = JUMP; onGround = false; }
+		}
+
+		window.addEventListener('keydown', (e) => {
+			const k = e.key.toLowerCase();
+			if (document.activeElement !== field && !field.contains(document.activeElement)) {
+				// only hijack keys when field focused, except give a hint focus on first arrow
+			}
+			if (isMove(k)) {
+				e.preventDefault();
+				keys[k] = true;
+				if (k === ' ' || k === 'arrowup' || k === 'w' || k === 'spacebar') jump();
+			}
+		});
+		window.addEventListener('keyup', (e) => { keys[e.key.toLowerCase()] = false; });
+
+		// focus field on click so keyboard works
+		field.addEventListener('mousedown', () => field.focus());
+		field.focus();
+
+		let navigating = false;
+		function hitBox(box: Element) {
+			if (navigating || box.classList.contains('hit')) return;
+			box.classList.add('hit');
+			vy = -6; // bounce hero down
+			// coin
+			const coin = document.createElement('div');
+			coin.className = 'coin';
+			const b = box as HTMLElement;
+			coin.style.left = b.offsetLeft + b.offsetWidth / 2 - 8 + 'px';
+			coin.style.top = b.offsetTop - 4 + 'px';
+			field.appendChild(coin);
+			navigating = true;
+			const href = (box as HTMLAnchorElement).href;
+			const target = (box as HTMLAnchorElement).target;
+			setTimeout(() => {
+				if (target === '_blank') { window.open(href, '_blank'); navigating = false; box.classList.remove('hit'); }
+				else window.location.href = href;
+			}, 480);
+		}
+
+		function loop() {
+			// horizontal
+			vx = 0;
+			if (keys['arrowleft'] || keys['a']) vx = -SPEED;
+			if (keys['arrowright'] || keys['d']) vx = SPEED;
+			if (vx < 0) hero.classList.add('face-left');
+			else if (vx > 0) hero.classList.remove('face-left');
+			x += vx;
+			x = Math.max(2, Math.min(W() - heroW - 2, x));
+
+			// vertical
+			vy -= GRAV;
+			let y = parseFloat(hero.style.bottom || String(GROUND));
+			y += vy;
+			if (y <= GROUND) { y = GROUND; vy = 0; onGround = true; }
+
+			// box collision (hero head hitting box underside while rising)
+			if (vy > 0) {
+				const heroLeft = x, heroRight = x + heroW;
+				const heroTop = field.clientHeight - (y + heroH); // top offset from field top
+				for (const box of boxes) {
+					const bx = (box as HTMLElement).offsetLeft;
+					const bw = (box as HTMLElement).offsetWidth;
+					const bBottom = (box as HTMLElement).offsetTop + (box as HTMLElement).offsetHeight;
+					const overlapX = heroRight > bx + 6 && heroLeft < bx + bw - 6;
+					if (overlapX && heroTop <= bBottom && heroTop >= bBottom - 18) {
+						hitBox(box);
+					}
+				}
+			}
+
+			hero.style.left = x + 'px';
+			hero.style.bottom = y + 'px';
+			requestAnimationFrame(loop);
+		}
+		hero.style.bottom = GROUND + 'px';
+		requestAnimationFrame(loop);
+	}
+</script>

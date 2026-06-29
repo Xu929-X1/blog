@@ -20,75 +20,76 @@ const posts = (await getCollection('blog')).sort(
 			main {
 				width: 960px;
 			}
+			.screen-title {
+				text-align: center;
+				margin-bottom: 1.5em;
+			}
+			.screen-title p {
+				font-family: var(--font-pixel);
+				font-size: 0.6rem;
+				color: var(--green);
+				animation: blink 1s infinite steps(1);
+			}
+			@keyframes blink { 50% { opacity: 0; } }
 			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+				gap: 1.5rem;
 				list-style-type: none;
 				margin: 0;
 				padding: 0;
 			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
 			ul li * {
 				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
+				transition: transform 0.08s steps(2);
 			}
 			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
+				width: 100%;
+				margin: 0;
+				border: none;
+				border-bottom: var(--px) solid #000;
+				box-shadow: none;
+				aspect-ratio: 2 / 1;
+				object-fit: cover;
 			}
 			ul li a {
 				display: block;
+				border: var(--px) solid #000;
+				background: var(--panel);
+				box-shadow: var(--shadow-hard);
+			}
+			ul li a:hover {
+				transform: translate(-2px, -2px);
+				box-shadow: 8px 8px 0 var(--magenta);
 			}
 			.title {
+				font-family: var(--font-pixel);
+				font-size: 0.85rem;
 				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
+				padding: 0.9em 0.8em 0.6em;
+				color: var(--yellow);
+				line-height: 1.3;
 			}
 			.date {
+				font-family: var(--font-pixel);
+				font-size: 0.55rem;
 				margin: 0;
-				color: rgb(var(--gray));
+				padding: 0 0.8em 1.2em;
+				color: var(--cyan);
 			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
+			ul li a:hover .title { color: var(--green); }
 			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
+				main { width: 100%; }
 			}
 		</style>
 	</head>
 	<body>
 		<Header />
 		<main>
+			<div class="screen-title">
+				<h1>STAGE SELECT</h1>
+				<p>▼ CHOOSE YOUR POST ▼</p>
+			</div>
 			<section>
 				<ul>
 					{
