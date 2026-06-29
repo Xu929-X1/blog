@@ -1,47 +1,112 @@
 ---
-title: 'memex — Inspiration and Current Status'
+title: 'memex — Why I start building it'
 description: 'Why I started building memex, the 1945 idea behind it, and where the project stands today.'
 pubDate: 'Jun 28 2026'
 heroImage: '../../assets/blog-placeholder-3.jpg'
 ---
 
-Most of my projects start the same way. I read something interesting, get
-excited about it, and then forget most of the details within a week — only to
-rediscover the same idea months later as if it were new. I wanted a better way
-to hold on to what I learn, so I started building **memex**.
+Before my twenties, I thought learning worked like this: I take in a concept, it
+locks into my mind, and when it shows up on an exam I know how to answer the
+question. As I went through college and graduate school, though, that model
+stopped holding up. A different pattern took its place. I learn something new, I
+notice how it connects to ideas I already know, and those connections build into
+a graph — where each node is a concept and each edge is the relationship between
+them.
 
-## The idea behind the name
+But this graph isn't always stable. Sometimes you lose an edge, and with it your
+way back to the node. Other times you just need a small hint to re-ignite the
+connection. That's where Vannevar Bush's *As We May Think* comes in.
 
-The name is a reference to Vannevar Bush. In his 1945 essay *As We May Think*,
-Bush described the **memex**: a desk-sized machine where a person could store
-their books, notes, and records, and link them together by association — closer
-to how the mind actually moves from one idea to the next. Instead of folders and
-filenames, he imagined **trails** of connected thought that you could follow
-again later.
+### 1945's Idea
 
-It was a remarkable idea for its time, and in some ways our tools still haven't
-caught up. We have nearly unlimited storage, but recall is still hard.
+Writing in 1945, Bush imagined a device he called the **memex**: a desk where a
+person could store all their books, notes, and records, and call any of them up
+instantly. What made it special wasn't the storage — it was how things were
+linked. Instead of filing each item under a single category, you could tie
+records together by association, building **trails** that ran from one idea to
+the next. To return to a thought, you didn't have to remember where you filed
+it; you just followed the trail. Bush's bet was that this mirrors how the mind
+actually works — by association rather than rigid indexes.
 
-## What I'm building
+That's exactly the experience I'd been describing to myself as a graph. The
+trails Bush wanted to capture are my edges, and the records are my nodes. He saw,
+decades before any of the tools existed, that the hard part of knowledge isn't
+holding facts — it's preserving the connections between them, and being able to
+find your way back when an edge starts to fade. That's the problem I want memex
+to solve.
 
-memex is my attempt at a small, personal version of that idea. The goals are
-simple to state, even if they're not simple to build:
+### Dejaview - A piece born too early
 
-- **Capture quickly** — notes, links, and snippets, without friction
-- **Connect by association** — relationships between ideas, not rigid hierarchy
-- **Resurface at the right time** — bring things back when they're useful again
+If Bush sketched the idea, a group at Columbia tried to build it. I came across
+it almost by accident. Searching Hacker News for products similar to what I had
+in mind, the very first post I opened had one of the authors in the comments,
+linking the paper himself. In 2007, Oren Laadan, Jason Nieh, and their
+colleagues published **DejaView**, a "personal virtual computer recorder." It continuously recorded everything that happened on
+a desktop — the visual output, the application and file system state, and the
+text shown on screen — and indexed it so you could later browse, search, and
+even time-travel back to any earlier moment and pick up where you left off. It
+was, in a very literal sense, a working memex: a complete, searchable record of
+your computing life.
 
-I'm not trying to build another note-taking app. I want a tool that helps me
-think and remember, rather than just storing things I'll never look at again.
+What strikes me is that it arrived almost a decade too early. DejaView could
+capture the *nodes* — every screen, every document, the full timeline of what
+you did — but it had no good way to recover the *edges*. In 2007 the only handle
+on all that data was keyword search. There were no large language models to read
+the captured text, understand what you were doing, and reconstruct the
+associations between moments. The recording was rich; the leverage wasn't there
+yet. The hard part — turning a pile of captured records back into connected,
+retrievable thought — was exactly the piece the technology of the time couldn't
+deliver. That gap is what makes building memex feel possible now.
 
-## Where the project stands
+### RAG - my POC
 
-This is an early progress update, not a finished product:
+So I started with the piece that's actually tractable today: recovering the
+edges. My first proof of concept is a personal knowledge engine built around
+retrieval-augmented generation. You feed it documents — PDFs, Markdown, plain
+text — and it parses them, breaks them into sections, and embeds each one into a
+vector space, so that meaning, not just keywords, becomes searchable. Then you
+ask a question in plain language and it pulls back the passages that actually
+relate, and an LLM answers on top of them.
 
-- The core concept and overall shape of the project are settled.
-- The capture and storage layer is in progress.
-- The model for linking ideas together is the next major piece of work.
-- Resurfacing and the interface are still in the design stage.
+In the node-and-edge terms from earlier: the documents are the nodes, and the
+embeddings are a way to rediscover the edges on demand. Instead of remembering
+where I filed something, I describe what I'm reaching for and let semantic
+similarity reconstruct the connection. This is the part DejaView couldn't do in
+2007 — and the part that makes the whole idea feel buildable now.
 
-I'll keep writing about the progress here — including the dead ends and the
-things that don't work — as the project develops. More soon.
+### Current Status
+
+The web app is the most complete piece. Today it can ingest PDF, Markdown, and
+text files; PDFs go through a layout-aware parser so tables and figures survive.
+Retrieval is hybrid — vector similarity and keyword search fused together and
+re-ranked — and you can pick between several OpenAI and Anthropic models for the
+ingestion step. It's a Next.js app backed by Postgres with `pgvector`, and it
+also exposes an MCP server so other tools (like Claude Desktop) can query the
+knowledge base directly.
+
+The frontier I'm working toward is the DejaView half: bringing the right memory
+to you instead of making you go search for it. I have a desktop client (built
+with Tauri) that already does a first version of this. It watches your text
+selection anywhere on the system — highlight a sentence in any app — and pops up
+a small heads-up overlay showing related things from your knowledge base, right
+next to your cursor. Today that lookup runs against the cloud retrieval engine;
+moving the embedding and the index fully on-device, and expanding from
+"selection" to passive background capture, is the part still under construction.
+
+### Challenges known
+
+The honest part. The biggest issues so far are about **fidelity** — making sure
+what gets indexed actually matches what you put in:
+
+- **Chunking.** Splitting documents by meaning works well for varied text but
+  misfires on dense, single-topic material and on very short documents, where it
+  produces oversized or awkward sections.
+- **Summarization drift.** When an LLM helps structure the text, it sometimes
+  paraphrases or even translates instead of reproducing the source faithfully —
+  quietly degrading what you can later retrieve. I'm leaning toward an
+  extraction-only approach for plain text to remove that risk.
+
+And the harder problem still ahead is the capture side: doing always-on,
+system-wide recording responsibly — which means real privacy controls and the
+user staying in charge of what's kept. That's the part that has to be right
+before any of the rest matters.
