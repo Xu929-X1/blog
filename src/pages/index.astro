@@ -47,7 +47,36 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 					</a>
 
 					<div class="hero" id="hero">
-						<div class="hero-face"></div>
+						<svg class="sprite" viewBox="0 0 12 15" shape-rendering="crispEdges" aria-hidden="true">
+							<!-- antenna -->
+							<rect class="bulb" x="5" y="0" width="1" height="1" fill="#ff2e88" />
+							<rect x="5" y="1" width="1" height="1" fill="#0b0a1e" />
+							<!-- head -->
+							<rect x="3" y="2" width="6" height="1" fill="#21e6ff" />
+							<rect x="2" y="3" width="8" height="6" fill="#21e6ff" />
+							<rect x="3" y="3" width="6" height="1" fill="#8af6ff" />
+							<!-- visor -->
+							<rect x="2" y="5" width="8" height="2" fill="#0b0a1e" />
+							<rect class="eye" x="4" y="5" width="1" height="2" fill="#39ff14" />
+							<rect class="eye" x="7" y="5" width="1" height="2" fill="#39ff14" />
+							<!-- cheeks + mouth -->
+							<rect x="2" y="7" width="1" height="1" fill="#ff2e88" />
+							<rect x="9" y="7" width="1" height="1" fill="#ff2e88" />
+							<rect x="5" y="8" width="2" height="1" fill="#0b0a1e" />
+							<!-- arms -->
+							<rect x="1" y="8" width="1" height="3" fill="#21e6ff" />
+							<rect x="10" y="8" width="1" height="3" fill="#21e6ff" />
+							<rect x="1" y="10" width="1" height="1" fill="#ff2e88" />
+							<rect x="10" y="10" width="1" height="1" fill="#ff2e88" />
+							<!-- torso -->
+							<rect x="3" y="9" width="6" height="2" fill="#21e6ff" />
+							<rect x="5" y="9" width="2" height="1" fill="#ffd23f" />
+							<!-- legs + feet -->
+							<rect x="4" y="11" width="1" height="3" fill="#0b0a1e" />
+							<rect x="7" y="11" width="1" height="3" fill="#0b0a1e" />
+							<rect x="3" y="13" width="2" height="1" fill="#ff2e88" />
+							<rect x="7" y="13" width="2" height="1" fill="#ff2e88" />
+						</svg>
 					</div>
 					<div class="ground"></div>
 				</div>
@@ -232,21 +261,29 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 		bottom: 40px;
 		width: 34px;
 		height: 40px;
-		background: #e8312f;             /* red cap/shirt */
-		border: 3px solid #000;
-		box-shadow: inset 0 -16px 0 #2a6cff; /* blue overalls bottom */
 		z-index: 4;
 		will-change: transform, left;
+		filter: drop-shadow(2px 3px 0 rgba(0, 0, 0, 0.55));
 	}
-	.hero-face {
-		position: absolute;
-		top: 6px; left: 50%;
-		transform: translateX(-50%);
-		width: 16px; height: 8px;
-		background: #f1c27d;            /* face */
-		box-shadow: -5px 0 0 #000, 5px 0 0 #000; /* two eyes */
+	.hero .sprite {
+		width: 100%;
+		height: 100%;
+		display: block;
+		animation: bob 0.85s infinite ease-in-out;
+		transform-origin: center bottom;
 	}
 	.hero.face-left { transform: scaleX(-1); }
+	.hero .bulb { animation: bulb 0.7s infinite steps(2); }
+	.hero .eye { animation: eyeglow 1.5s infinite ease-in-out; }
+	@keyframes bob {
+		0%, 100% { transform: translateY(0); }
+		50% { transform: translateY(-1px); }
+	}
+	@keyframes bulb { 50% { opacity: 0.25; } }
+	@keyframes eyeglow { 50% { opacity: 0.45; } }
+	@media (prefers-reduced-motion: reduce) {
+		.hero .sprite, .hero .bulb, .hero .eye { animation: none; }
+	}
 
 	.tap-hint {
 		text-align: center;
