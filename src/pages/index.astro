@@ -4,7 +4,7 @@ import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
-const base = import.meta.env.BASE_URL;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <!doctype html>
@@ -19,7 +19,7 @@ const base = import.meta.env.BASE_URL;
 				<p class="kicker">PLAYER 1 START</p>
 				<h1 class="arcade-title">BOWEI'S<br />BLOG</h1>
 				<p class="tagline">A side-scrolling adventure through code, ideas &amp; pixels.</p>
-				<a class="start-btn" href={`${base}blog`}>▶ PRESS START</a>
+				<a class="start-btn" href={`${base}/blog`}>▶ PRESS START</a>
 				<p class="hi-score">HI-SCORE&nbsp;&nbsp;999999</p>
 			</section>
 
@@ -33,11 +33,11 @@ const base = import.meta.env.BASE_URL;
 				<div class="playfield" id="playfield" tabindex="0" aria-label="Mini platformer menu. Use arrow keys to move and space to jump into a block to navigate.">
 					<div class="clouds"></div>
 
-					<a class="qbox" href={`${base}blog`} data-label="BLOG">
+					<a class="qbox" href={`${base}/blog`} data-label="BLOG">
 						<span class="q">?</span>
 						<span class="qlabel">BLOG</span>
 					</a>
-					<a class="qbox" href={`${base}about`} data-label="ABOUT">
+					<a class="qbox" href={`${base}/about`} data-label="ABOUT">
 						<span class="q">?</span>
 						<span class="qlabel">ABOUT</span>
 					</a>
@@ -55,10 +55,8 @@ const base = import.meta.env.BASE_URL;
 			</section>
 		</main>
 		<Footer />
-	</body>
-</html>
 
-<style>
+		<style>
 	.title-screen {
 		text-align: center;
 		padding: 2em 0 3em;
@@ -293,11 +291,10 @@ const base = import.meta.env.BASE_URL;
 			if (onGround) { vy = JUMP; onGround = false; }
 		}
 
+		const focused = () => document.activeElement === field;
 		window.addEventListener('keydown', (e) => {
+			if (!focused()) return;
 			const k = e.key.toLowerCase();
-			if (document.activeElement !== field && !field.contains(document.activeElement)) {
-				// only hijack keys when field focused, except give a hint focus on first arrow
-			}
 			if (isMove(k)) {
 				e.preventDefault();
 				keys[k] = true;
@@ -306,9 +303,8 @@ const base = import.meta.env.BASE_URL;
 		});
 		window.addEventListener('keyup', (e) => { keys[e.key.toLowerCase()] = false; });
 
-		// focus field on click so keyboard works
+		// focus field on click so keyboard works (no auto-focus -> avoids page jump)
 		field.addEventListener('mousedown', () => field.focus());
-		field.focus();
 
 		let navigating = false;
 		function hitBox(box: Element) {
@@ -370,3 +366,5 @@ const base = import.meta.env.BASE_URL;
 		requestAnimationFrame(loop);
 	}
 </script>
+	</body>
+</html>
