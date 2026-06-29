@@ -95,21 +95,27 @@ moving the embedding and the index fully on-device, and expanding from
 
 ### Challenges known
 
-The honest part. The biggest issues so far are about **fidelity** — making sure
-what gets indexed actually matches what you put in:
+The document side is in good shape — ingestion, chunking, and retrieval over
+uploaded files work well enough that they're no longer what keeps me up at
+night. The real challenge is the episodes.
 
-- **Chunking.** Splitting documents by meaning works well for varied text but
-  misfires on dense, single-topic material and on very short documents, where it
-  produces oversized or awkward sections.
-- **Summarization drift.** When an LLM helps structure the text, it sometimes
-  paraphrases or even translates instead of reproducing the source faithfully —
-  quietly degrading what you can later retrieve. I'm leaning toward an
-  extraction-only approach for plain text to remove that risk.
+Capturing what you do on a computer is the easy part; the data piles up fast.
+The hard part is **organizing those episodes so they actually mean something**.
+A raw timeline of every window and selection is just noise — a longer version of
+the same pile DejaView produced. To be useful, memex has to decide where one
+episode ends and the next begins, figure out which moments belong together, and
+connect them back to the documents and ideas they relate to.
 
-And the harder problem still ahead is the capture side: doing always-on,
-system-wide recording responsibly — which means real privacy controls and the
-user staying in charge of what's kept. That's the part that has to be right
-before any of the rest matters.
+And then it has to do the thing that matters most: genuinely help you
+*remember*, not just surface a wall of matching text. Popping out a snippet is
+easy. Reconstructing enough of a moment — what you were doing, what it connected
+to, why it mattered — to actually re-ignite the memory is the open problem, and
+it's the one the whole project lives or dies on.
+
+Underneath all of it sits the capture side itself: doing always-on, system-wide
+recording responsibly, with real privacy controls and the user in charge of
+what's kept. That has to be right before any of the rest earns the right to
+exist.
 
 ### Where this is going
 
@@ -120,10 +126,9 @@ those episodes as first-class memory alongside the files you deliberately save.
 
 With both halves in one place — the documents you chose to keep and the
 episodes of how you actually worked — the system can do the thing a plain search
-box never could: not just hand back a file, but reconstruct a moment. Remind you
+box never could - reconstruct a moment. Remind you
 *what* you were doing when you last touched an idea, *what* it connected to, and
 *why* it mattered — enough of a hint to re-ignite the memory and pick the trail
 back up.
 
-That's the whole bet. Storage was solved decades ago. The part still worth
-building is the part that helps you remember.
+That's the whole bet.
